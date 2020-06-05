@@ -1,0 +1,280 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Noraml">
+
+    <!--Цвета для кнопок-->
+    <!--#region -->
+    <SolidColorBrush x:Key="Mouse.ButtonPressed" Color="#FF00A400"/>
+    <SolidColorBrush x:Key="Mouse.CursorOver" Color="#FF01AA01"/>
+    <!--#endregion-->
+
+    <!--Цвета для кнопок в меню-->
+    <!--#region -->
+    <SolidColorBrush x:Key="Mouse.TopButtonPressed" Color="#FFEAF7F9"/>
+    <SolidColorBrush x:Key="Mouse.TopCursorOver" Color="#FFEFFDFF"/>
+    <!--#endregion-->
+
+    <!-- Стиль Label -->
+    <Style TargetType="Label">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="Cambria"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Стиль TextBox -->
+    <Style TargetType="TextBox">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontFamily" Value="Cambria"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border BorderThickness="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
+                            CornerRadius="5" SnapsToDevicePixels="True">
+                        <ScrollViewer Name="PART_ContentHost"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Стиль ProgressBar для отображения прогресса загрузки изображений на форме ImagesWindow -->
+    <Style TargetType="ProgressBar" x:Key="loadImagesBar">
+        <Setter Property="Width" Value="300"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="0 0 0 80"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Setter Property="Visibility" Value="{Binding VisibilityForProgressBar}"/>
+        <Setter Property="Value" Value="{Binding Percents}"/>
+        <Setter Property="Background" Value="White"/>
+    </Style>
+
+    <!-- Стиль ListBox для просмотра изображений на форме ImagesWindow -->
+    <Style TargetType="ListBox" x:Key="imageViewer">
+        <Setter Property="MinHeight" Value="300"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel ItemHeight="230" ItemWidth="230"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Стиль Button -->
+    <Style TargetType="Button">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontFamily" Value="Cambria"/>
+        <Setter Property="Background" Value="#00b300"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="buttonBorder" BorderThickness="0" CornerRadius="10" Background="{TemplateBinding Background}">
+                        <ContentPresenter RecognizesAccessKey="True" Focusable="False"  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="buttonBorder" Value="{StaticResource Mouse.CursorOver}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="buttonBorder" Value="{StaticResource Mouse.ButtonPressed}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Стиль кнопки возврата на главную страницу -->
+    <Style x:Key="backToMainButton" TargetType="Button">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Content" Value="Главная"/>
+        <Setter Property="FontFamily" Value="Cambria"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="buttonBorder" BorderThickness="0" CornerRadius="5" Background="{TemplateBinding Background}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="image" Source="Icons/home.png" Stretch="Uniform" Height="20" Width="20" RenderTransformOrigin="0.5, 0.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform x:Name="noFreeze"/>
+                                </Image.RenderTransform>
+                            </Image>
+                            <ContentPresenter Grid.Column="1" RecognizesAccessKey="True" Focusable="False"  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="image"  Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)" Duration="0:0:1">
+                                        <LinearDoubleKeyFrame KeyTime="0%" Value="0"/>
+                                        <LinearDoubleKeyFrame KeyTime="40%" Value="-8"/>
+                                        <LinearDoubleKeyFrame KeyTime="60%" Value="0"/>
+                                        <LinearDoubleKeyFrame KeyTime="80%" Value="8"/>
+                                        <LinearDoubleKeyFrame KeyTime="100%" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="buttonBorder" Value="{StaticResource Mouse.TopCursorOver}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="buttonBorder" Value="{StaticResource Mouse.TopButtonPressed}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Стиль кнопки возврата на главную страницу -->
+    <Style x:Key="exitButton" TargetType="Button" BasedOn="{StaticResource backToMainButton}">
+        <Setter Property="Content" Value="Выход"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="buttonBorder" BorderThickness="0" CornerRadius="5" Background="{TemplateBinding Background}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="image" Source="Icons/send-file.png" Stretch="Uniform" Height="20" Width="20" RenderTransformOrigin="0.5, 0.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform x:Name="noFreeze"/>
+                                </Image.RenderTransform>
+                            </Image>
+                            <ContentPresenter Grid.Column="1" RecognizesAccessKey="True" Focusable="False"  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetName="image"  Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)" Duration="0:0:1">
+                                        <LinearDoubleKeyFrame KeyTime="0%" Value="0"/>
+                                        <LinearDoubleKeyFrame KeyTime="40%" Value="-8"/>
+                                        <LinearDoubleKeyFrame KeyTime="60%" Value="0"/>
+                                        <LinearDoubleKeyFrame KeyTime="80%" Value="8"/>
+                                        <LinearDoubleKeyFrame KeyTime="100%" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="buttonBorder" Value="{StaticResource Mouse.TopCursorOver}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="buttonBorder" Value="{StaticResource Mouse.TopButtonPressed}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Стиль правой кнопки на странице поиска для перемещения по страницам -->
+    <Style x:Key="rightPageButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Command" Value="{Binding ButtonSpawner.ClickButton}"/>
+        <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
+        <Setter Property="Visibility" Value="{Binding ButtonSpawner.VisibilityForRightButton}"/>
+        <Setter Property="Content" Value="Следующая страница"/>
+        <Setter Property="Tag" Value="Right Button"/>
+        <Setter Property="Width" Value="250"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="buttonBorder" BorderThickness="0" CornerRadius="3" Background="{TemplateBinding Background}">
+                        <ContentPresenter RecognizesAccessKey="True" Focusable="False"  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="buttonBorder" Value="{StaticResource Mouse.CursorOver}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="buttonBorder" Value="{StaticResource Mouse.ButtonPressed}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Стиль левой кнопки на странице поиска для перемещения по страницам -->
+    <Style x:Key="leftPageButton" TargetType="Button" BasedOn="{StaticResource rightPageButton}">
+        <Setter Property="Tag" Value="Left Button"/>
+        <Setter Property="Content" Value="Предыдущая страница"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="#00b300"/>
+        <Setter Property="Visibility" Value="{Binding ButtonSpawner.VisibilityForLeftButton}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="buttonBorder" BorderThickness="2" BorderBrush="#00b300" CornerRadius="3" Background="{TemplateBinding Background}">
+                        <ContentPresenter RecognizesAccessKey="True" Focusable="False"  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="buttonBorder" Value="AliceBlue"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="buttonBorder" Value="#FFE7EFF5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Стиль ListBoxItem-->
+    <Style TargetType="{x:Type ListBoxItem}">
+        <Setter Property="FontFamily" Value="Cambria"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="itemBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Pink">
+                        <Grid MinWidth="50">
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" RecognizesAccessKey="True"
+                                                          HorizontalAlignment="Center" Margin="0 0 8 0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="itemBorder" Value="AliceBlue"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
