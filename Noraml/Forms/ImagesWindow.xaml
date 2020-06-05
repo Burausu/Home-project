@@ -1,0 +1,137 @@
+﻿<Window x:Class="Noraml.ImagesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:local="clr-namespace:Noraml"
+        mc:Ignorable="d"
+        Title="ImagesWindow" Height="1080" Width="1900" x:Name="win"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" WindowState="Maximized" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="200"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBox x:Name="searchByTags">
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding ButtonSpawner.Search}" CommandParameter="{Binding ElementName=searchByTags, Path=Text}" Key="Enter"/>
+                    </TextBox.InputBindings>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotFocus">
+                            <i:InvokeCommandAction Command="{Binding ButtonSpawner.GotFocus}" CommandParameter="{Binding ElementName=searchByTags}"/>
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="LostFocus">
+                            <i:InvokeCommandAction Command="{Binding ButtonSpawner.LostFocus}" CommandParameter="{Binding ElementName=searchByTags}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="Text" Value="Search..."/>
+                            <Setter Property="Width" Value="500"/>
+                            <Setter Property="Height" Value="40"/>
+                            <Setter Property="FontSize" Value="20"/>
+                            <Setter Property="FontFamily" Value="Cambria"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type TextBox}">
+                                        <Border BorderThickness="0" Background="#FFF3F3F3" BorderBrush="{TemplateBinding BorderBrush}" 
+                            CornerRadius="5" SnapsToDevicePixels="True" Padding="5 0 0 0">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="20"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Image Source="/Noraml;component/Icons/icons8-поиск-30.png"/>
+                                                <Border Grid.Column="1" Padding="10 0 0 0" BorderThickness="0">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="60"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <ScrollViewer Name="PART_ContentHost"/>
+                                                        <Button Grid.Column="1">
+                                                            <Button.Resources>
+                                                                <Style TargetType="Button">
+                                                                    <Setter Property="FontSize" Value="17"/>
+                                                                    <Setter Property="Content" Value="Поиск"/>
+                                                                    <Setter Property="Command" Value="{Binding ButtonSpawner.Search}"/>
+                                                                    <Setter Property="CommandParameter" Value="{Binding ElementName=searchByTags, Path=Text}"/>
+                                                                    <Setter Property="FontFamily" Value="Cambria"/>
+                                                                    <Setter Property="Foreground" Value="White"/>
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                                                <Border x:Name="buttonBorder" BorderThickness="0" CornerRadius="0 5 5 0" Background="#00b300">
+                                                                                    <ContentPresenter RecognizesAccessKey="True" Focusable="False"  SnapsToDevicePixels="True"
+                                                                                  VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                                                </Border>
+                                                                                <ControlTemplate.Triggers>
+                                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                                        <Setter Property="Background" TargetName="buttonBorder" Value="{StaticResource Mouse.CursorOver}"/>
+                                                                                    </Trigger>
+                                                                                    <Trigger Property="IsPressed" Value="True">
+                                                                                        <Setter Property="Background" TargetName="buttonBorder" Value="{StaticResource Mouse.ButtonPressed}"/>
+                                                                                    </Trigger>
+                                                                                </ControlTemplate.Triggers>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </Button.Resources>
+                                                        </Button>
+                                                    </Grid>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Button Style="{StaticResource backToMainButton}" Margin="20 0 0 0" Command="{Binding ButtonSpawner.BackToMain}" CommandParameter="{Binding ElementName=searchByTags}"/>
+                <Button Style="{StaticResource exitButton}" Margin="20 0 0 0" Command="{Binding ButtonSpawner.CloseWindow}" CommandParameter="{Binding ElementName=win}"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1" Margin="20">
+            <ListBox x:Name="listBox" Style="{StaticResource imageViewer}" BorderThickness="0" ItemsSource="{Binding ImageFiller.Images, UpdateSourceTrigger=PropertyChanged}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Grid>
+        <Grid Grid.Row="2">
+            <StackPanel x:Name="panel" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel.Resources>
+                    <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
+                        <Setter Property="Height" Value="30"/>
+                        <Setter Property="FontSize" Value="20"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Style="{StaticResource leftPageButton}" Margin="0 0 40 0"/>
+                <TextBox x:Name="pageBox" Text="{Binding ButtonSpawner.Page}" FontFamily="/Noraml;component/Fonts/#EchoRevival" Width="70" Height="30" PreviewKeyDown="PageBox_PreviewKeyDown">
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding ButtonSpawner.LoadByPageNumber, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=pageBox, Path=Text}"  Key="Return"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                <Label Content="/" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <Label Content="{Binding ButtonSpawner.ItemsSummary, UpdateSourceTrigger=PropertyChanged}" MinHeight="30" MinWidth="70" FontFamily="/Noraml;component/Fonts/#EchoRevival"/>
+                <Button Style="{StaticResource rightPageButton}" Margin="40 0 0 0"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
